@@ -1,0 +1,17 @@
+.phpstorm.meta.*
+_ide*
+.env
+.env-*
+yarn-error.log
+/.idea/
+/storage/
+/node_modules/
+/vendor/
+/keys/
+tmp/
+.cache
+.composer
+.docker
+.bash_history
+.config
+docker-compose.yml

@@ -12,8 +12,6 @@
 const colors = require('colors');
 colors.enable();
 
-const min = Number(process.argv[2]);
-const max = Number(process.argv[3]);
 const trafficLightColors = ['green', 'yellow', 'red'];
 
 function getPrimeNumbersFromRange(min, max) {
@@ -38,7 +36,10 @@ function isPrimeNumber(number) {
     return true;
 }
 
-module.exports.printPrimeNumbersWithColors = (colorList = trafficLightColors) => {
+module.exports.printPrimeNumbersWithColors = (args, colorList = trafficLightColors) => {
+    const min = Number(args.min);
+    const max = Number(args.max);
+
     if (isNaN(min) || isNaN(max)) {
         console.error(colors.red.bold('You should pass 2 numbers to the script.'));
 
