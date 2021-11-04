@@ -29,6 +29,7 @@ module.exports = {
             max: 1,
         }],
         'no-trailing-spaces': ['error'],
+        'no-useless-constructor': 'off',
         'object-curly-spacing': [2, 'never'],
         'padding-line-between-statements': [
             'error',
