@@ -1,7 +1,9 @@
+#!/usr/bin/env node
 'use strict';
 const minimist = require('minimist');
 const {printPrimeNumbersWithColors} = require('./tasks/task1');
 const {runTimers} = require('./tasks/task2');
+const {fileManager} = require('./tasks/task4');
 
 const info = (args) => {
     console.log('You should pass correct args to the script call.');
@@ -21,6 +23,7 @@ const methods = {
     notFoundInfo,
     task1: printPrimeNumbersWithColors,
     task2: runTimers,
+    task4: fileManager,
 };
 
 const args = minimist(process.argv.slice(2));
