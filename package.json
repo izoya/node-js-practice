@@ -9,7 +9,8 @@
     },
     "scripts": {
         "dev": "node ./src/index.js",
-        "serve": "nodemon ./src/tasks/task5/server.js"
+        "serve": "nodemon ./src/tasks/task5/server.js",
+        "socket": "nodemon ./src/tasks/task6/server/server"
     },
     "devDependencies": {
         "eslint": "^7.32.0",
@@ -24,6 +25,8 @@
         "express": "^4.17.1",
         "file-type": "^16.5.3",
         "inquirer": "^8.2.0",
-        "minimist": "^1.2.5"
+        "minimist": "^1.2.5",
+        "moment": "^2.29.1",
+        "socket.io": "^4.3.2"
     }
 }
