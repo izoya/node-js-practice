@@ -8,6 +8,9 @@
   <title>Socket App</title>
 </head>
 <body>
+<div><h3>Info: </h3></div>
+<div>Connections: <span id="conn-info"></span> <i><span id="server-info"></span></i></div>
+
 <input type="text" id="input" autofocus>
 
 <input type="submit" id="send" value="Send">
@@ -20,55 +23,37 @@
   // const socket = io('localhost:3030');
   const socket = io();
 
-  const addMessage = (msg) => {
-    const msgSpan = document.createElement('span').innerHTML = msg;
-    document.getElementById('messages').append(msgSpan);
+  const addMessage = ({author, msg}) => {
+    const parent = document.getElementById('messages');
+    const div = document.createElement('div');
+    div.innerHTML = `<strong>${author} </strong> ${msg}`;
+    parent.appendChild(div)
     document.getElementById('messages').append(document.createElement('br'));
+  };
+
+  const showServerInfo = msg => {
+    const infoSpan = document.getElementById('server-info');
+    infoSpan.innerHTML = msg;
+    setTimeout(() => {infoSpan.innerHTML = ''}, 5000);
+  };
+
+  const updateConnInfo = count => {
+    const infoSpan = document.getElementById('conn-info');
+    infoSpan.innerHTML = count;
   };
 
   socket.on('connect', function () {
     console.log('Successful connected to server');
   });
 
-  socket.on('SERVER_MSG', function (data) {
-    addMessage(data.msg);
-  });
+  socket.on('SERVER_MSG', function (data) {addMessage(data)});
+  socket.on('NEW_CONN_EVENT', function (data) {showServerInfo(data.msg)});
+  socket.on('TOTAL_CONN', function (data) {updateConnInfo(data.count)});
 
   document.getElementById('send').onclick = function () {
     socket.emit('CLIENT_MSG', {msg: document.getElementById('input').value});
     document.getElementById('input').value = '';
   };
-
-  const data = {
-    username: 'Igor',
-    password: 'verysecurepassword'
-  };
-
-  const getRandomId = () => Math.floor(Math.random() * 100000);
-
-  const sendMessage = async () => {
-    console.log('Emitting');
-    const id = getRandomId();
-
-    // socket.once(id, (data) => {
-    //     if (!data.error) {
-    //         console.log('Data saved');
-    //     } else {
-    //         console.error(data.error);
-    //     }
-    // });
-    //
-
-    const result = await new Promise((resolve) => {
-      socket.emit('SAVE_USER_DATA', {
-        payload: data,
-        id
-      }, (response) => {
-        resolve(response);
-      });
-    })
-    console.log('Result', result);
-  }
 
   document.getElementById('message').onclick = sendMessage;
 </script>

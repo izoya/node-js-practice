@@ -1,35 +1,30 @@
 const io = require('socket.io');
 const app = require('./http-server');
+const faker = require('faker');
 const startWorker = require('./worker-init');
 
 const socketServer = io(app);
 
-const DATABASE = {
-    storage: {},
-    async saveUser(data) {
-        await new Promise(resolve => setTimeout(resolve, 500));
-        this.storage[data.payload.username] = data.payload;
-    },
-};
-
-socketServer.on('connection', function (socket) {
+socketServer.on('connection', (socket) => {
     console.log('Connection', socket.id);
+    socket.data.username = faker.name.findName();
+
+    socket.broadcast.emit('NEW_CONN_EVENT', {msg: socket.data.username + ' joined the channel'});
+    socketServer.emit('TOTAL_CONN', {count: socketServer.engine.clientsCount});
 
     socket.on('CLIENT_MSG', (data) => {
-        console.log(data);
-        // socket.emit('SERVER_MSG', { msg: data.msg.split('').reverse().join('')});
-        // socket.broadcast.emit('SERVER_MSG', { msg: data.msg.split('').reverse().join('')});
-
-        socketServer.emit('SERVER_MSG', {msg: data.msg.split('').reverse().join('')});
+        socketServer.emit('SERVER_MSG', {
+            author: socket.data.username,
+            msg: data.msg,
+        });
     });
 
-    socket.on('SAVE_USER_DATA', async function ({payload, id}, ackFn) {
-        await DATABASE.saveUser({payload});
-        ackFn({error: 'ASd'});
+    socket.on('disconnect', () => {
+        socket.broadcast.emit('NEW_CONN_EVENT', {msg: socket.data.username + ' left the channel'});
     });
 });
 
-app.listen(3030, () => {
+app.listen(3031, () => {
     console.log('Server started: http://localhost:3030');
 });
 
