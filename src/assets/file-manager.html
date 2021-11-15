@@ -10,14 +10,20 @@
 <body>
     <div><h3>Info: </h3></div>
     <div>Connections: <span id="conn-info"></span> <i><span id="server-info"></span></i></div>
+
+    <label for="input">Search</label><input type="text" id="input" autofocus>
+    <input type="submit" id="send" value="Send">
+
     <div id="page_content"></div>
 </body>
 <script type="text/javascript">
     // const socket = io('localhost:3030');
+    let pathname = window.location.pathname;
+
     const socket = io();
     socket.on('connect', function () {
         console.log('Successful connected to server');
-        loadContent('/');
+        loadContent(pathname);
     });
 
     const loadContent = (pathname) => {
@@ -36,11 +42,44 @@
         document.getElementById('page_content').innerHTML = data;
     };
 
+    const showServerInfo = msg => {
+        const infoSpan = document.getElementById('server-info');
+        infoSpan.innerHTML = msg;
+        setTimeout(() => {
+            infoSpan.innerHTML = ''
+        }, 5000);
+    };
+
+    const updateConnInfo = count => {
+        const infoSpan = document.getElementById('conn-info');
+        infoSpan.innerHTML = count;
+    };
+
     document.getElementById('page_content').addEventListener('click', async e => {
         if (e.target.tagName !== 'A') return;
 
         e.preventDefault();
+        pathname = e.target.pathname;
         loadContent(e.target.pathname);
     });
+
+    document.getElementById('send').onclick = function () {
+        socket.emit('SEARCH', {
+            search: document.getElementById('input').value,
+            filePath: pathname,
+        }, response => {
+            updatePageContent(response.data);
+        });
+
+        document.getElementById('input').value = '';
+    };
+
+    socket.on('NEW_CONN_EVENT', function (data) {
+        showServerInfo(data.msg)
+    });
+    socket.on('TOTAL_CONN', function (data) {
+        updateConnInfo(data.count)
+    });
+
 </script>
 </html>

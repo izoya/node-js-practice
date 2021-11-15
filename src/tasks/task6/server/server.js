@@ -1,7 +1,6 @@
 const io = require('socket.io');
 const app = require('./http-server');
 const faker = require('faker');
-const startWorker = require('./worker-init');
 
 const socketServer = io(app);
 
@@ -28,4 +27,3 @@ app.listen(3031, () => {
     console.log('Server started: http://localhost:3030');
 });
 
-startWorker(24).then(result => console.log(result));
