@@ -3,6 +3,7 @@
 const minimist = require('minimist');
 const {printPrimeNumbersWithColors} = require('./tasks/task1');
 const {runTimers} = require('./tasks/task2');
+const {startParsing} = require('./tasks/task3');
 const {fileManager} = require('./tasks/task4');
 
 const info = (args) => {
@@ -23,6 +24,7 @@ const methods = {
     notFoundInfo,
     task1: printPrimeNumbersWithColors,
     task2: runTimers,
+    task3: startParsing,
     task4: fileManager,
 };
 
