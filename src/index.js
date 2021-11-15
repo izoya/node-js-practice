@@ -6,6 +6,7 @@ const {runTimers} = require('./tasks/task2');
 const {startParsing} = require('./tasks/task3');
 const {fileManager} = require('./tasks/task4');
 const {startServer} = require('./tasks/task5');
+const {startWebSocket} = require('./tasks/task6');
 
 const info = (args) => {
     console.log('You should pass correct args to the script call.');
@@ -28,6 +29,7 @@ const methods = {
     task3: startParsing,
     task4: fileManager,
     task5: startServer,
+    task6: startWebSocket,
 };
 
 const args = minimist(process.argv.slice(2));
