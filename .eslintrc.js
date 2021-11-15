@@ -30,6 +30,7 @@ module.exports = {
         }],
         'no-trailing-spaces': ['error'],
         'no-useless-constructor': 'off',
+        'node/no-callback-literal': 'off',
         'object-curly-spacing': [2, 'never'],
         'padding-line-between-statements': [
             'error',

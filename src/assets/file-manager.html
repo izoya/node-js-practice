@@ -1,0 +1,46 @@
+<html lang="en">
+
+<script src="https://cdn.socket.io/3.1.1/socket.io.min.js"
+        integrity="sha384-gDaozqUvc4HTgo8iZjwth73C6dDDeOJsAgpxBcMpZYztUfjHXpzrpdrHRdVp8ySO"
+        crossorigin="anonymous"></script>
+
+<head>
+    <title>Socket App</title>
+</head>
+<body>
+    <div><h3>Info: </h3></div>
+    <div>Connections: <span id="conn-info"></span> <i><span id="server-info"></span></i></div>
+    <div id="page_content"></div>
+</body>
+<script type="text/javascript">
+    // const socket = io('localhost:3030');
+    const socket = io();
+    socket.on('connect', function () {
+        console.log('Successful connected to server');
+        loadContent('/');
+    });
+
+    const loadContent = (pathname) => {
+        socket.emit('FOLLOW_LINK', pathname, (response) => {
+            if (response.status === 'error') {
+                console.log(response.message);
+
+                return;
+            }
+
+            updatePageContent(response.data);
+        });
+    };
+
+    const updatePageContent = (data) => {
+        document.getElementById('page_content').innerHTML = data;
+    };
+
+    document.getElementById('page_content').addEventListener('click', async e => {
+        if (e.target.tagName !== 'A') return;
+
+        e.preventDefault();
+        loadContent(e.target.pathname);
+    });
+</script>
+</html>

@@ -1,8 +1,8 @@
 const path = require('path');
 const fs = require('fs');
-const os = require('os');
 const FileType = require('file-type');
 
+const indexHtml = fs.readFileSync('src/assets/file-manager.html', 'utf-8');
 const lineHtml = fs.readFileSync('src/assets/includes/file-item.html', 'utf-8');
 const fileHtml = fs.readFileSync('src/assets/includes/file-content.html', 'utf-8');
 const imageHtml = fs.readFileSync('src/assets/includes/image-content.html', 'utf-8');
@@ -45,16 +45,8 @@ const chooseAction = async (filePath) => {
 };
 
 const handler = async (req, res) => {
-    const filePath = req.params[0] !== '/' ? req.params[0] : os.homedir();
-
-    if (!fs.existsSync(filePath)) {
-        res.send('Invalid path: ' + filePath);
-
-        return;
-    }
-
     res.set('Content-Type', 'text/html');
-    res.send(await chooseAction(filePath));
+    res.send(indexHtml);
 };
 
-module.exports = {handler};
+module.exports = {handler, chooseAction};
